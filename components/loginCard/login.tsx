@@ -7,7 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import abi from "@/abi.json";
 import 'react-toastify/dist/ReactToastify.css';
-import { getAuthData } from "@/State/auth/auth-slice";
+import { getAuthData } from "@/State/auth-slice";
 import { useDispatch } from "react-redux";
 
 const contractAddress = '0xeaBEe785B2E71F5815d453ae9a94CD9ef7d28DF3'
@@ -35,7 +35,7 @@ function LoginPage() {
 			const contractInstance = new ethers.Contract(contractAddress, abi, signer);
 			setContract(contractInstance);
 			}
-	  }
+  }
   
   const handleClick = async () => {
     // console.log(username, password);
@@ -56,11 +56,12 @@ function LoginPage() {
 const handleRoute = async () => {
   try{
     if(contract) {
+      console.log('conyttac', account);
       if (typeof (window as any).ethereum !== 'undefined') {
         const provider = new ethers.providers.Web3Provider((window as any).ethereum);
         const signer = provider.getSigner();
         const contractSigner = contract.connect(signer);
-        const response = await contractSigner.login(username, account);
+        await contractSigner.login(username, account);
         toast.success("Logged in Successfully");
         dispatch(getAuthData({username: username, address: account}))
         router.push('/');

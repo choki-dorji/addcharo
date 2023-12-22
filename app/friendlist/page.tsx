@@ -54,7 +54,7 @@ function UserFriend() {
     <div className="flex flex-col gap-3 justify-center items-center">
       {allusers ? 
         allusers?.map((items: any, index: number) => (
-            <FriendList key={index} name={items[0]} address={items[1]} friend={true} />
+            <FriendList key={index} name={items[1]} address={items[0]} friend={true} />
         )) : <div> No friends </div>
     }
     </div>
