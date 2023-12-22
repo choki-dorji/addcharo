@@ -11,13 +11,14 @@ import { faCoffee, faComment } from "@fortawesome/free-solid-svg-icons";
 import Modal1 from "../Modals/Modal";
 import ChatModal from "../Modals/Modal";
 
+
 const contractAddress = '0xeaBEe785B2E71F5815d453ae9a94CD9ef7d28DF3'
 const rpcUrl = 'https://rpc.testnet.fantom.network'; 
 
 export default function FriendList(props: any) {
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const [isFollowed, setIsFollowed] = useState(false);
-  const [username, setUsername] = useState<string | undefined>('')
+  const [addresses, setAddress] = useState<string | undefined>('')
   const [password, setPassword] = useState<string | undefined>('')
   const [providers, setProviders] = useState<any>()
   const [contract, setContract] = useState<any>()
@@ -36,25 +37,10 @@ export default function FriendList(props: any) {
       const contractInstance = new ethers.Contract(contractAddress, abi, signer);
       setContract(contractInstance);
       }
+      setAddress(props.address);
     }
-
-  const addFriend = async (address: any, name: any) => {
-    console.log("address", address, "name", name);
-    try{
-      if(contract) {
-        if (typeof (window as any).ethereum !== 'undefined') {
-          const provider = new ethers.providers.Web3Provider((window as any).ethereum);
-          const signer = provider.getSigner();
-          const contractSigner = contract.connect(signer);
-          const response = await contractSigner.addFriend(address, name);
-          setIsFollowed(!isFollowed)
-        }
-    }
-  } catch (e: any) {
-    toast.error(e.reason);
-    // console.log(e);
-  }
-  }
+    
+ 
   //Todo: make sure that you canbt add your seldf as a friends
   return (
     <>
@@ -110,9 +96,10 @@ export default function FriendList(props: any) {
       </Card>
 
     <>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false}>
-        <ChatModal />
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false}>        
+        <ChatModal address={addresses}/>
       </Modal>
+
     </>
 
     </>
